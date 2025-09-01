@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+
+  postgres-db:
+    image: postgres:16
+    restart: always
+    container_name: postgres-google-test
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres-google-test-data:/var/lib/postgresql/data
+
+  backend-google-test:
+    build: .
+    container_name: backend-google-test
+    restart: always
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      PORT: 3000
+    ports:
+      - 3001:3000
+    depends_on:
+      - postgres-db
+
+volumes:
+  postgres-google-test-data:
