@@ -5,10 +5,5 @@ export const userSchema = Joi.object({
     password: Joi.string().min(6).required(),
     name: Joi.string().min(2).required(),
     lastname: Joi.string().min(2).required(),
-    document: Joi.number().integer().min(1000000).required(),
+    role: Joi.string().valid("admin", "client","establishment").required()
 });
-
-
-export const validateUser = (user) => {
-    return userSchema.validate(user);
-}; 

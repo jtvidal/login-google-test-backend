@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 5433:5432
+      - 5432:5432
     volumes:
       - postgres-google-test-data:/var/lib/postgresql/data
 
@@ -21,7 +21,7 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: postgres-db
+      DB_HOST: localhost
       DB_PORT: 5432
       PORT: 3000
     ports:
