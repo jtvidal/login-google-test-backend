@@ -18,14 +18,36 @@ app.get("/", (req, res) => {
   res.send("Backend funcionando ");
 });
 
-await sequelize
-  .sync({ alter: true })
-  .then(() => {
-    console.log("Database & tables created!");
-  })
-  .catch((err) => {
-    console.error("Error creating database:", err);
-  });
+/**
+ * Attemps to connect if DB connection fails
+ */
+async function connectToDatabaseWithRetry() {
+  const maxRetries = 10;
+  let attempts = 0;
+  while (attempts < maxRetries) {
+    try {
+      await sequelize.authenticate();
+      await sequelize.sync({ alter: true });
+      console.log("Connection has been established successfully.");
+      break;
+    } catch (error) {
+      attempts++;
+      console.error(
+        `Unable to connect to the database (Attempt ${attempts} of ${maxRetries}):`,
+        error
+      );
+      if (attempts < maxRetries) {
+        console.log("Retrying in 5 seconds...");
+        await new Promise((res) => setTimeout(res, 5000));
+      } else {
+        console.error(
+          "Max retries reached. Could not connect to the database."
+        );
+      }
+    }
+  }
+}
+await connectToDatabaseWithRetry();
 
 routerApi(app);
 app.listen(PORT, () => {

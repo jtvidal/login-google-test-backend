@@ -13,6 +13,7 @@ services:
     volumes:
       - postgres-google-test-data:/var/lib/postgresql/data
 
+
   backend-google-test:
     build: .
     container_name: backend-google-test
@@ -21,7 +22,7 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: localhost
+      DB_HOST: postgres-db
       DB_PORT: 5432
       PORT: 3000
     ports:
